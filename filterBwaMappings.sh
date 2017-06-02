@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-INPUT_SAM="/home/vitor/test_sam"
+INPUT_SAM=$1
 
 SAM_LINES=`cat $INPUT_SAM | awk '!/^@SQ/&&$2!=4' | wc -l`
 
 
-cat $INPUT_SAM | awk -v myLastLine=$SAM_LINES '{
+cat $INPUT_SAM | awk -v myLastLine=$SAM_LINES '!/^@SQ/&&$2!=4{
 
     if($2==4){
             print "Remove unmapped reads from input file and sort by read name." > "/dev/stderr"
