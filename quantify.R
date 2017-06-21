@@ -208,7 +208,7 @@ ProR1_set2000 <- proR1.genes.read[proR1.genes.read$V1>=10000,]$V2
 
 ProC5_set200 <- proC5.genes.read[proC5.genes.read$V1<200,]$V2
 ProC5_set1000 <- proC5.genes.read[proC5.genes.read$V1>=900 & proC5.genes.read$V1<1000,]$V2
-ProC5_set2000 <- proC5.genes.read[proC5.genes.read$V1>=5000 & proC5.genes.read$V1<5100,]$V2
+ProC5_set2000 <- proC5.genes.read[proC5.genes.read$V1>=10000,]$V2
 
 
 
@@ -217,8 +217,8 @@ d3 <- ProC5_set200
 
 breaks <- pretty(range(c(d1, d3)), n=20)
 
-D1 <- hist(d1, breaks=breaks, plot=FALSE)$counts
-D3 <- hist(d3, breaks=breaks, plot=FALSE)$counts
+D1 <- hist(d1, breaks=breaks, plot=FALSE)$counts*100/sum(d1)
+D3 <- hist(d3, breaks=breaks, plot=FALSE)$counts*100/sum(d3)
 
 
 #dat <- rbind(D1, D2)
@@ -262,5 +262,5 @@ colnames(dat) <- paste(breaks[-length(breaks)], breaks[-1], sep="-")
 
 barplot(dat, beside=TRUE, space=c(0, 0.1), las=2, main="ProR1")
 
-legend("topright", inset=.05, c("length < 200","length > 10,000"), fill=c("dimgrey","azure"), horiz=F)
+legend("topright", title="Transcript length", inset=.05, c("< 200","> 10,000"), fill=c("dimgrey","azure"), horiz=F)
 
