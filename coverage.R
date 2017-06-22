@@ -2,16 +2,19 @@ setwd("/home/vitor/PRJ.SRP064142/BWA_ION_QUANT/2-quantification-featureCounts/")
 
 #####################################################################
 
-cov_nt <- read.table("ProR1_ProC5.gene.counts.nt_total.nt_mean",row.names = 1)
+cov_nt <- read.table("ProR1_ProC5.gene.median_length.count.total_nt.mean_nt.nt_by_length",row.names = 1)
 
 head(cov_nt)
 
-colnames(cov_nt) <- c("R1_count", 
-                      "C5_count", 
+colnames(cov_nt) <- c("length",
+                      "R1_count", 
                       "R1_nt_total",
                       "R1_nt_mean",
+                      "R1_nt_by_length",
+                      "C5_count", 
                       "C5_nt_total",
-                      "C5_nt_mean")
+                      "C5_nt_mean",
+                      "C5_nt_by_length")
 detach(cov_nt)
 attach(cov_nt)
 
@@ -29,7 +32,7 @@ p + annotate("text", label = "R² = 0.8987; p-value < 2.2e-16", x = 4, y = 1, si
 ### MICHA
 
 head(ProC5)
-xxx=cbind(ProR1,ProC5)
+xxx=cbind(R1_count,C5_count)
 xxx
 order(xxx, xxx[,2])
 order(xxx[,2])
@@ -42,6 +45,8 @@ xs=head(x4,100);cor(xs[,1],xs[,2])
 xs
 x4=xxx[order(xxx[,2],dec=T),]
 x4=xxx[order(xxx[,2],decreasing =T),]
+x4
+summary(lm(x4[,2]~x4[,1]))
 xs=head(x4,100);cor(xs[,1],xs[,2])
 xs=head(x4,1000);cor(xs[,1],xs[,2])
 xs=head(x4,10);cor(xs[,1],xs[,2])
