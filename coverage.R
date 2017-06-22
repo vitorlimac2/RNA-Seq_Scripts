@@ -1,63 +1,28 @@
-
-total_counts <- read.table("ProR1_ProC5.sorted.total")
-
-plot(log10(total_counts$V2+1),log10(total_counts$V3+1), ylab = "ProC5", xlab = "ProR1", main = "Counts (log10)", pch = 16, cex = 0.5, col = "blue")
-
-model1 <- lm (log10(total_counts$V3+1)  ~ log10(total_counts$V2+1))
-
-abline(model1)
-
-summary(model1)
-
-text(4,1,"R² = 0.9; p-value < 2.2e-16")
-
-
-plot(log10(total_counts$V2+1),log10(total_counts$V3+1), ylab = "ProC5", xlab = "ProR1", main = "Counts (log10)", pch = 16, cex = 0.5, col = "black")
-abline(model1, lwd=2)
-
-res <- signif(residuals(model1), 5)
-pre <- predict(model1)
-
-segments(log10(total_counts$V2+1), log10(total_counts$V3+1), log10(total_counts$V2+1), pre, col="red")
-
-library(calibrate)
-textxy(log10(total_counts$V2+1), log10(total_counts$V3+1), rownames(total_counts), cx=0.7)
-
+setwd("/home/vitor/PRJ.SRP064142/BWA_ION_QUANT/2-quantification-featureCounts/")
 
 #####################################################################
 
-total_counts_median <- read.table("ProR1_ProC5.sorted.total.median_length")
-model1 <- lm (log10(total_counts_median$V3+1)  ~ log10(total_counts_median$V2+1))
-library(ggplot2)
+cov_nt <- read.table("ProR1_ProC5.gene.counts.nt_total.nt_mean",row.names = 1)
 
-colnames(total_counts_median) <- c("gene", "ProR1", "ProC5", "Length")
+head(cov_nt)
 
-attach(total_counts_median)
+colnames(cov_nt) <- c("R1_count", 
+                      "C5_count", 
+                      "R1_nt_total",
+                      "R1_nt_mean",
+                      "C5_nt_total",
+                      "C5_nt_mean")
+detach(cov_nt)
+attach(cov_nt)
 
-p <- ggplot(total_counts_median, aes(x = log10(ProR1+1), 
-                                y = log10(ProC5+1), 
-                                color = "blue",
-                                size = log10(Length))) +
-  geom_point()
+p <- ggplot(cov_nt, aes(x = log10(R1_count+1), 
+                                y = log10(C5_count+1)),
+                        color = R1_nt_mean) +
+  geom_point(alpha=0.2) +
+  stat_smooth(method="lm", se=T, col="red")
+  
 
-p + geom_abline(intercept = 0.09399136, slope = 1.02267463) + annotate("text", label = "R² = 0.9; p-value < 2.2e-16", x = 4, y = 1, size = 4, colour = "red")
-
-ggplot(total_counts_median, aes(x = log10(ProR1+1), 
-                                y = log10(ProC5+1), 
-                                size = log10(Length))) +
-  geom_point()
-
-plot(log10(total_counts$V2+1),log10(total_counts$V3+1), ylab = "ProC5", xlab = "ProR1", main = "Counts (log10)", pch = 16, cex = 0.5, col = "black")
-abline(model1)
-res <- signif(residuals(model1), 5)
-pre <- predict(model1)
-library(calibrate)
-textxy(log10(total_counts$V2+1), log10(total_counts$V3+1), total_counts_median$V4, cx=0.7)
-
-xx=10;cor(head(sort(log10(ProC5+1),dec=T),xx), head(sort(log10(ProR1+1),dec=T),xx))
-head(which(is.na(total_counts_median$V3)))
-
-head(total_counts_median$V3)
+p + annotate("text", label = "R² = 0.8987; p-value < 2.2e-16", x = 4, y = 1, size = 4, colour = "red") 
 
 ####################
 
@@ -105,3 +70,5 @@ a=1000;b=10000;cor(x4[a:b,1],x4[a:b,2])
 a=10000;b=nrow(x4);cor(x4[a:b,1],x4[a:b,2])
 a=10000;b=nrow(x4);cor(x4[a:b,1],x4[a:b,2],log="xy")
 a=10000;b=nrow(x4);plot(x4[a:b,1],x4[a:b,2],log="xy")
+
+##################### END MICHA ################################
