@@ -12,16 +12,20 @@ import java.util.Map;
 public class Main {
 
     private static HashMap<String, List<String>> ortologGroups = new HashMap<>();
+    private static HashMap<String, List<String>> ortologFunctions = new HashMap<>();
 
     private static int groupId = 0;
 
     private static boolean createGroup(String[] tuple){
         groupId += 1;
         String id = "gTc"+groupId;
-        List<String> l = new ArrayList<>();
-        l.add(tuple[0]);
-        l.add(tuple[1]);
-        ortologGroups.put(id,l);
+        List<String> l1 = new ArrayList<>();
+        l1.add(tuple[0]);
+        l1.add(tuple[1]);
+        ortologGroups.put(id,l1);
+        List<String> l2 = new ArrayList<>();
+        l2.add(tuple[2]);
+        ortologFunctions.put(id,l2);
         return true;
     }
 
@@ -66,18 +70,17 @@ public class Main {
         }
 
         for(Map.Entry<String,List<String>> group: ortologGroups.entrySet()){
-            //System.out.println(group.getKey() + " " + group.getValue());
+            System.out.println("@GROUP_SIZE " + group.getValue().size());
 
             String sedCommand="";
 
             for(String gene: group.getValue()){
-                sedCommand += "\'s/"+gene+"/"+group.getKey()+"/g\'";
-                System.out.println(sedCommand);
+                String mygene = gene.replace(".","\\.");
+                sedCommand += "\'s/\\<"+mygene+"/"+group.getKey()+"\\>/g\'";
+                System.out.println("@MY_SED_COMMAND " + sedCommand);
                 sedCommand="";
 
             }
-
-
         }
 
     }
