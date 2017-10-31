@@ -39,7 +39,7 @@ if(length(args)!=4){
 replicate_read_lengths_file <- args[1]
 inputFile <- args[2]
 total_genes <- as.numeric(args[3])
-numCores <- as.numeric(args[5])
+numCores <- as.numeric(args[4])
 
 #### ONLY FOR TEST ##################
 #replicate_read_lengths_file <- "/home/vitor/Proj_ProC_R/reads/trimmed/ProC_1.fastq.trimmed.fq.read_lengths.txt"
