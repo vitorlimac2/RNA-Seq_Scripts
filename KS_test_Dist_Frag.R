@@ -5,6 +5,8 @@
 ks.table <- function(tab_row){
   
   gene <- tab_row[1]
+  print(gene)
+  print(tab_row[2])
   dist_frag <- strsplit(tab_row[2],",")
   dist_frag <- as.numeric(unlist(dist_frag))
   
@@ -38,13 +40,33 @@ replicate_read_lengths_file <- args[1]
 inputFile <- args[2]
 total_genes <- as.numeric(args[3])
 
-rep_frags <- read.table(replicate_read_lengths_file, header = F)$V2
 
-inputFile <- "/home/vitor/Proj_ProC_R/mappings_star/ProC1.Gene.DistFrag.DistMaps.ProteinCoding"
+#### ONLY FOR TEST ##################
+#replicate_read_lengths_file <- "/home/vitor/Proj_ProC_R/reads/trimmed/ProC_1.fastq.trimmed.fq.read_lengths.txt"
+#inputFile <- "/home/vitor/Proj_ProC_R/mappings_star/ProC1.Gene.DistFrag.DistMaps.ProteinCoding"
+#total_genes <- 18523
+
+######################################
+
+rep_frags <- read.table(replicate_read_lengths_file, header = F)$V2
 mapped_frags <- read.table(inputFile, header = F)[,1:2]
 
 #######################################################################################################
+### MULTI-THREAD
 
+library(parallel,quietly = T, verbose = F)
+## Create cluster
+clus <- makeCluster(3)
+
+## The clusterExport() function exports an object to each node, 
+## enabling them to work parallely. The use of it, as it can be 
+# appreciated, is extremely simple: you need to pass the variable 
+# name/s in a character vector (or a single string, as in this case)
+clusterExport(clus,"rep_frags")
+
+aa <- parRapply(clus,mapped_frags, ks.table)
+
+stopCluster(cl)
 
 #########################################################################################
 
