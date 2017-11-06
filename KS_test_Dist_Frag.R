@@ -15,8 +15,8 @@ ks.table <- function(tab_row){
   out_two.sided <- paste(d1$statistic,d1$p.value,sep = ";")
   out_less <- paste(d2$statistic,d2$p.value,sep = ";")
   out_greater <- paste(d3$statistic,d3$p.value,sep = ";")
-  
   output_line <- paste(gene, out_less, out_two.sided, out_greater, sep = " ")
+  return(output_line)
   
 }
 
@@ -59,7 +59,7 @@ clus <- makeCluster(numCores, type="FORK")
 # appreciated, is extremely simple: you need to pass the variable 
 # name/s in a character vector (or a single string, as in this case)
 clusterExport(clus,"rep_frags")
-parApply(clus,mapped_frags,1, ks.table) 
+aa <- parApply(clus,mapped_frags,1, ks.table)
 stopCluster(clus)
 
 #########################################################################################
