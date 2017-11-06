@@ -28,13 +28,12 @@ args <- commandArgs(trailingOnly=TRUE)
 
 
 if(length(args)!=4){
-  message("USAGE:\nRscript --vanilla KS_test_Dist_Frag.R repFrag mappedFrag numGenes numCores\nOPTIONS:\n\trepFrag: File with two columns. 1st column contains read id. 2nd colunm contains read length.\n\tmappedFrag: File with two columns. 1st column contains gene id. 2nd column contains comma-separated list of fragment lengths.\n\tnumGenes: number of detected genes (number of lines of mappedFrag).\n\tnumCores: number of threads", call.=FALSE)
+  message("USAGE:\nRscript --vanilla KS_test_Dist_Frag.R repFrag mappedFrag numCores\nOPTIONS:\n\trepFrag: File with two columns. 1st column contains read id. 2nd colunm contains read length.\n\tmappedFrag: File with two columns. 1st column contains gene id. 2nd column contains comma-separated list of fragment lengths.\n\tnumCores: number of threads", call.=FALSE)
   stop("Missing options.")
 }
 
 replicate_read_lengths_file <- args[1]
 inputFile <- args[2]
-total_genes <- as.numeric(args[3])
 numCores <- as.numeric(args[4])
 
 #### ONLY FOR TEST ##################
@@ -46,7 +45,7 @@ numCores <- as.numeric(args[4])
 
 rep_frags <- read.table(replicate_read_lengths_file, header = F)$V2
 mapped_frags <- read.table(inputFile, header = F)[,1:2]
-
+total_genes <- nrow(mapped_frags)
 #######################################################################################################
 ### MULTI-THREAD
 
@@ -63,6 +62,7 @@ aa <- parApply(clus,mapped_frags,1, ks.table)
 output_file <- paste(inputFile,".ks.output",sep="")
 write(aa,output_file)
 stopCluster(clus)
+gc()
 
 #########################################################################################
 
