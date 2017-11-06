@@ -60,6 +60,8 @@ clus <- makeCluster(numCores, type="FORK")
 # name/s in a character vector (or a single string, as in this case)
 clusterExport(clus,"rep_frags")
 aa <- parApply(clus,mapped_frags,1, ks.table)
+output_file <- paste(inputFile,".ks.output",sep="")
+write(aa,output_file)
 stopCluster(clus)
 
 #########################################################################################
