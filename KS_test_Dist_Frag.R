@@ -52,7 +52,7 @@ mapped_frags <- read.table(inputFile, header = F)[,1:2]
 
 library(parallel,quietly = T, verbose = F)
 ## Create cluster
-clus <- makeCluster(numCores)
+clus <- makeCluster(numCores, type="FORK")
 
 ## The clusterExport() function exports an object to each node, 
 ## enabling them to work parallely. The use of it, as it can be 
