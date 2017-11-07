@@ -2,7 +2,7 @@
 args <- commandArgs(trailingOnly=TRUE)
 
 if(length(args)!=1){
-  message("USAGE:\nRscript --vanilla KS_test_Dist_Frag.R ks_output_file.\nOPTIONS:\n\tks_output_file: Output file of KS_test_Dist_Frag.R.", call.=FALSE)
+  message("USAGE:\nRscript --vanilla KS_test_Dist_Frag_Qvalue.R ks_pvalues_output_file.\nOPTIONS:\n\tks_pvalues_output_file: Output file of KS_test_Dist_Frag.R with only p-values on columns", call.=FALSE)
   stop("Missing options.")
 }
 
