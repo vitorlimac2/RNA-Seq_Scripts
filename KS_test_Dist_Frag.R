@@ -27,14 +27,14 @@ ks.table <- function(tab_row){
 args <- commandArgs(trailingOnly=TRUE)
 
 
-if(length(args)!=4){
+if(length(args)!=3){
   message("USAGE:\nRscript --vanilla KS_test_Dist_Frag.R repFrag mappedFrag numCores\nOPTIONS:\n\trepFrag: File with two columns. 1st column contains read id. 2nd colunm contains read length.\n\tmappedFrag: File with two columns. 1st column contains gene id. 2nd column contains comma-separated list of fragment lengths.\n\tnumCores: number of threads", call.=FALSE)
   stop("Missing options.")
 }
 
 replicate_read_lengths_file <- args[1]
 inputFile <- args[2]
-numCores <- as.numeric(args[4])
+numCores <- as.numeric(args[3])
 
 #### ONLY FOR TEST ##################
 #replicate_read_lengths_file <- "/home/vitor/Proj_ProC_R/reads/trimmed/ProC_1.fastq.trimmed.fq.read_lengths.txt"
