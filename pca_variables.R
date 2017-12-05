@@ -30,28 +30,26 @@ cts <- read.table(paste(work_dir,my_quant, sep=""), row.names = 1, header = F)
 
 head(cts)
 
-cts <- cts[,1:9]
+head(cts)
+
+colnames(cts) <- replicates
 
 head(cts)
 
-colnames(cts) <- replicates[1:9]
+conditions <- c("C","C","C","C","C","C","C","C","C","R","R")
+initialRNA <- c("2","2","2","2","2","0.2","0.2","0.2","0.2","2","2")
+insertSizes <- c("A","B","A","B","A","B","A","B","A","B","B")
 
-head(cts)
-
-#conditions <- c("C","C","C","C","C","C","C","C","C","R","R")
-#initialRNA <- c("2","2","2","2","2","0.2","0.2","0.2","0.2","2","2")
-#insertSizes <- c("A","B","A","B","A","B","A","B","A","B","B")
-
-conditions <- c("C","C","C","C","C","C","C","C","C")
-initialRNA <- c("2","2","2","2","2","0.2","0.2","0.2","0.2")
-insertSizes <- c("A","B","A","B","A","B","A","B","A")
+#conditions <- c("C","C","C","C","C","C","C","C","C")
+#initialRNA <- c("2","2","2","2","2","0.2","0.2","0.2","0.2")
+#insertSizes <- c("A","B","A","B","A","B","A","B","A")
 
 
-colData <- data.frame(condition = insertSizes, initialRNA = initialRNA)
+colData <- data.frame(condition = conditions, initialRNA = initialRNA, insertSize = insertSizes)
 
 colData
 
-rownames(colData) <- replicates[1:9]
+rownames(colData) <- replicates
 
 colData
 
@@ -75,8 +73,8 @@ rld <-rlog(dds)
 
 ## rlog transformation
 
-  plotPCA(rld, intgroup=c("condition","initialRNA")) + 
-  geom_text(aes(label = replicates[1:9]), position = position_nudge(y = 1)) + 
+plotPCA(rld, intgroup=c("condition","initialRNA", "insertSize")) + 
+  geom_text(aes(label = replicates), position = position_nudge(y = 1)) + 
   ggtitle("Read Counts - rlog transformation") +
   theme(plot.title = element_text(hjust=0.5,size=14))
 
