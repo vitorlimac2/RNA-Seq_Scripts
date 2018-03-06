@@ -1,3 +1,4 @@
+library("ggplot2")
 workdir <- "/home/vitor/Proj_ProC_R/mappings_star/"
 
 replicates <- c("ProC1",
@@ -78,3 +79,9 @@ legend(80,30, lwd=2, cex=0.8, bty = "n", legend=replicates, col=c("purple",
         lty = c(1,1,1,1,1,NA,NA,NA,NA,2,2),
        pch = c(NA,NA,NA,NA,NA,"o","o","o","o",NA,NA),
        horiz=FALSE)
+
+c1 <- as.data.frame(c1)
+
+p <- ggplot() + geom_line(data=c1, aes(c1),colour="purple")
+
+print(p)
