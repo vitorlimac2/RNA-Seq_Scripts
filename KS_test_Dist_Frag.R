@@ -65,35 +65,3 @@ stopCluster(clus)
 gc()
 
 #########################################################################################
-
-## read each line
-
-# while (length(oneLine <- readLines(con, n = 1, warn = FALSE)) > 0) {
-#     myVector <- strsplit(oneLine, " ")
-#     gene <- myVector[[1]][1]
-#     dist_frag <- strsplit(myVector[[1]][2],",")
-#     
-#     dist_frag <- as.numeric(unlist(dist_frag))
-#     
-#     d1 <- ks.test(rep_frags,dist_frag, alternative="two.sided")
-#     d2 <- ks.test(rep_frags,dist_frag, alternative="less")
-#     d3 <- ks.test(rep_frags,dist_frag, alternative="greater")
-#     
-#     out_two.sided <- paste(d1$statistic,d1$p.value,sep = ";")
-#     out_less <- paste(d2$statistic,d2$p.value,sep = ";")
-#     out_greater <- paste(d3$statistic,d3$p.value,sep = ";")
-#     
-#     output_line <- paste(gene, out_less, out_two.sided, out_greater, sep = " ")
-#     
-#     myFrac <- i*100/total_genes; 
-#     
-#     i = i + 1;
-#     
-#     my_log <- paste("Running ", myFrac,"%", sep="")
-#     
-#     print(my_log, stderr())
-#     print(output_line,stdout())
-#     
-# }
-# 
-# close(con)
