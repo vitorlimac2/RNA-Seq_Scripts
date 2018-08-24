@@ -1,0 +1,3 @@
+for file in *.out.bam.featureCounts; do cat $file | awk -v OFS="\t" -v COL_READ=1 -v COL_GENES=4 -v COL_STATUS=2 '{if($COL_STATUS=="Assigned"){if(gene_list[$COL_READ]=="NA" || gene_list[$COL_READ]==""){gene_list[$COL_READ]=$COL_GENES;}else{gene_list[$COL_READ]=gene_list[$COL_READ]","$COL_GENES;}}else{if(gene_list[$COL_READ]==""){gene_list[$COL_READ]="NA";}}} END {for(i in gene_list){n=split(gene_list[i],l,",");for(j in l){print i, l[j];}}}' | sort | uniq | sort -k1,1 > $file.Unique.Sorted; done
+
+for file in *.Unique.Sorted; do cat $file | awk -v OFS="\t" '{reads_mm[$1]+=1; reads_id[NR]=$1;genes_id[NR]=$2} END {for(i in reads_id){if(genes_id[i]=="NA"){mm = 0}else{mm=reads_mm[reads_id[i]]} print reads_id[i],genes_id[i], mm}}' > $file.ReadAssignmentToGene; done
