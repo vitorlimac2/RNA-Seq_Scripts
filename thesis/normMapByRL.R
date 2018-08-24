@@ -18,8 +18,6 @@ inputFile <- args[1]
 
 f1 <- read.table(inputFile, fill = T, sep="\t");
 
-setwd(output_directory)
-
 read_col <- 1;
 length_col <- 2;
 n_mappings <- 3;
