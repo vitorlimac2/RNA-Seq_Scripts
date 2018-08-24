@@ -1,3 +1,36 @@
+sort -k1,1 ProC1.MappedReadInfo.ReadCountNormalizedByRL > temp
+mv temp ProC1.MappedReadInfo.ReadCountNormalizedByRL
+
+sort -k1,1 ProC2.MappedReadInfo.ReadCountNormalizedByRL > temp
+mv temp ProC2.MappedReadInfo.ReadCountNormalizedByRL
+
+sort -k1,1 ProC3.MappedReadInfo.ReadCountNormalizedByRL > temp
+mv temp ProC3.MappedReadInfo.ReadCountNormalizedByRL
+
+sort -k1,1 ProC4.MappedReadInfo.ReadCountNormalizedByRL > temp
+mv temp ProC4.MappedReadInfo.ReadCountNormalizedByRL
+
+sort -k1,1 ProC5.MappedReadInfo.ReadCountNormalizedByRL > temp
+mv temp ProC5.MappedReadInfo.ReadCountNormalizedByRL
+
+sort -k1,1 ProC6.MappedReadInfo.ReadCountNormalizedByRL > temp
+mv temp ProC6.MappedReadInfo.ReadCountNormalizedByRL
+
+sort -k1,1 ProC7.MappedReadInfo.ReadCountNormalizedByRL > temp
+mv temp ProC7.MappedReadInfo.ReadCountNormalizedByRL
+
+sort -k1,1 ProC8.MappedReadInfo.ReadCountNormalizedByRL > temp
+mv temp ProC8.MappedReadInfo.ReadCountNormalizedByRL
+
+sort -k1,1 ProC9.MappedReadInfo.ReadCountNormalizedByRL > temp
+mv temp ProC9.MappedReadInfo.ReadCountNormalizedByRL
+
+sort -k1,1 ProR1.MappedReadInfo.ReadCountNormalizedByRL > temp
+mv temp ProR1.MappedReadInfo.ReadCountNormalizedByRL
+
+sort -k1,1 ProR2.MappedReadInfo.ReadCountNormalizedByRL > temp
+mv temp ProR2.MappedReadInfo.ReadCountNormalizedByRL
+
 join ProC1.MappedReadInfo.ReadCountNormalizedByRL ProC1Aligned.out.bam.featureCounts.Unique.Sorted.ReadAssignmentToGene | awk '$7!=0{gene_count[$6]+=$5/$7} END {for(i in gene_count){print i, gene_count[i]}}' | sort -k1,1 > ProC1.normalized.Frac
 
 join ProC1.MappedReadInfo.ReadCountNormalizedByRL ProC1Aligned.out.bam.featureCounts.Unique.Sorted.ReadAssignmentToGene | awk '$7!=0{gene_count[$6]+=$5} END {for(i in gene_count){print i, gene_count[i]}}' | sort -k1,1 > ProC1.normalized.NoFrac
