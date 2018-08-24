@@ -1,3 +1,11 @@
+#!/usr/bin/env Rscript
+args <- commandArgs(trailingOnly=TRUE)
+
+if(length(args)!=1){
+  message("USAGE:\nRscript --vanilla normMapByRL.R <file>.MappedReadInfo.\nOPTIONS:\n\t<file>.MappedReadInfo: 4-column output file of Obtain_mapped_read_information.sh. 1st = read_id; 2nd = read length; 3rd = number of mappings; 4st = mappings status (1= mapped; 0 = unmapped)", call.=FALSE)
+  stop("Missing options.")
+}
+
 ## Test
 ## input file
 ## READ | LENGTH | STATUS | GENE
@@ -6,9 +14,9 @@
 
 ## File with read, it length and mapping status
 
-f1 <- read.table("/home/vitor/Downloads/ProR2Aligned.out.bam.Input1", fill = T, sep="\t");
+inputFile <- args[1]
 
-output_directory <- "/home/vitor/Downloads/";
+f1 <- read.table(inputFile, fill = T, sep="\t");
 
 setwd(output_directory)
 
@@ -71,6 +79,6 @@ for(i in seq_len(length(length_bins)-1)){
 
 ## Print the new gene count with normalization factor
 
-write.table(temp_file,paste(output_directory,"count_normalized",sep = ""),sep = "\t", quote = F, row.names = F, col.names = F);
+write.table(temp_file,paste(inputFile,"ReadCountNormalizedByRL",sep = "."),sep = "\t", quote = F, row.names = F, col.names = F);
 
 rm("temp_file")
