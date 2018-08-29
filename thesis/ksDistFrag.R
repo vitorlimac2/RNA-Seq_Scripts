@@ -42,8 +42,8 @@ numCores <- as.numeric(args[3])
 #total_genes <- 5
 #numCores <- 2
 ######################################
-
-rep_frags <- read.table(replicate_read_lengths_file, header = F)$V2
+rep_frags <- read.table(replicate_read_lengths_file, header = F, sep = "\t", fill = T)
+rep_frags <- rep_frags[rep_frags$V4 > 0,]$V2
 mapped_frags <- read.table(inputFile, header = F)[,1:2]
 total_genes <- nrow(mapped_frags)
 #######################################################################################################
