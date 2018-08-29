@@ -87,7 +87,7 @@ join ProC7.MappedReadInfo.ReadCountNormalizedByRL ProC7Aligned.out.bam.featureCo
 
 join ProC7.MappedReadInfo.ReadCountNormalizedByRL ProC7Aligned.out.bam.featureCounts.Unique.Sorted.ReadAssignmentToGene | awk '$7!=0{gene_count[$6]+=1/$7} END {for(i in gene_count){print i, gene_count[i]}}' | sort -k1,1 > ProC7.NoNormalized.Frac
 
-join ProC8.MappedReadInfo.ReadCountNormalizedByRL ProC8ligned.out.bam.featureCounts.Unique.Sorted.ReadAssignmentToGene | awk '$7!=0{gene_count[$6]+=$5/$7} END {for(i in gene_count){print i, gene_count[i]}}' | sort -k1,1 > ProC8.normalized.Frac
+join ProC8.MappedReadInfo.ReadCountNormalizedByRL ProC8Aligned.out.bam.featureCounts.Unique.Sorted.ReadAssignmentToGene | awk '$7!=0{gene_count[$6]+=$5/$7} END {for(i in gene_count){print i, gene_count[i]}}' | sort -k1,1 > ProC8.normalized.Frac
 
 join ProC8.MappedReadInfo.ReadCountNormalizedByRL ProC8Aligned.out.bam.featureCounts.Unique.Sorted.ReadAssignmentToGene | awk '$7!=0{gene_count[$6]+=$5} END {for(i in gene_count){print i, gene_count[i]}}' | sort -k1,1 > ProC8.normalized.NoFrac
 
@@ -95,7 +95,7 @@ join ProC8.MappedReadInfo.ReadCountNormalizedByRL ProC8Aligned.out.bam.featureCo
 
 join ProC8.MappedReadInfo.ReadCountNormalizedByRL ProC8Aligned.out.bam.featureCounts.Unique.Sorted.ReadAssignmentToGene | awk '$7!=0{gene_count[$6]+=1/$7} END {for(i in gene_count){print i, gene_count[i]}}' | sort -k1,1 > ProC8.NoNormalized.Frac
 
-join ProC9.MappedReadInfo.ReadCountNormalizedByRL ProC9ligned.out.bam.featureCounts.Unique.Sorted.ReadAssignmentToGene | awk '$7!=0{gene_count[$6]+=$5/$7} END {for(i in gene_count){print i, gene_count[i]}}' | sort -k1,1 > ProC9.normalized.Frac
+join ProC9.MappedReadInfo.ReadCountNormalizedByRL ProC9Aligned.out.bam.featureCounts.Unique.Sorted.ReadAssignmentToGene | awk '$7!=0{gene_count[$6]+=$5/$7} END {for(i in gene_count){print i, gene_count[i]}}' | sort -k1,1 > ProC9.normalized.Frac
 
 join ProC9.MappedReadInfo.ReadCountNormalizedByRL ProC9Aligned.out.bam.featureCounts.Unique.Sorted.ReadAssignmentToGene | awk '$7!=0{gene_count[$6]+=$5} END {for(i in gene_count){print i, gene_count[i]}}' | sort -k1,1 > ProC9.normalized.NoFrac
 
