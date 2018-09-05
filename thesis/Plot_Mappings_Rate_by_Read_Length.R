@@ -10,8 +10,6 @@ ranges <- c("[20,50[", "[50,100[", "[100,150[",
             "[150,200[", "[200,250[","[250,...[")
 
 mappings <- data.frame(ProR_2, ProC_2, ProC_8, ranges)
-
-
 mappings$ranges <- factor(mappings$ranges, levels=ranges)
 
 library("ggplot2")
