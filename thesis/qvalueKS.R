@@ -8,8 +8,8 @@ if(length(args)!=1){
 
 
 inputFile <- args[1]
-pvalues_table <- read.table(inputFile, header=F, row.names=1)
-colnames(pvalues_table) <- c("less","two_sided","greater")
+pvalues_table <- read.table(textConnection(gsub(";", " ", readLines(inputFile))), row.names = 1)
+colnames(pvalues_table) <- c("less_distance", "less", "twosided_distance","twosided","greater_distance","greater")
 nr <- nrow(pvalues_table)
 qvalues_table <- pvalues_table
 qvalues_table$less <- p.adjust(pvalues_table$less, method="fdr", n=nr)
@@ -17,4 +17,3 @@ qvalues_table$two_sided <- p.adjust(pvalues_table$two_sided, method="fdr", n=nr)
 qvalues_table$greater <- p.adjust(pvalues_table$greater, method="fdr", n=nr)
 output_file <- paste(inputFile,".Qvalues",sep="")
 write.table(qvalues_table,output_file,sep="\t")
-
