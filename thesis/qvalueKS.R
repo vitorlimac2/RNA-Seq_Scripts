@@ -7,9 +7,7 @@ if(length(args)!=1){
 }
 
 
-#inputFile <- args[1]
-inputFile <- "/home/vitor/Downloads/ProC1.GeneDistFrag.ks.output"
-#pvalues_table <- read.table(inputFile, header=F, row.names=1)
+inputFile <- args[1]
 pvalues_table <- read.table(textConnection(gsub(";", " ", readLines(inputFile))), row.names = 1)
 colnames(pvalues_table) <- c("less_distance", "less", "twosided_distance","twosided","greater_distance","greater")
 nr <- nrow(pvalues_table)
