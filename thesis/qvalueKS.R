@@ -7,17 +7,16 @@ if(length(args)!=1){
 }
 
 
-inputFile <- args[1]
+#inputFile <- args[1]
+inputFile <- "/home/vitor/Downloads/ProC1.GeneDistFrag.ks.output"
+#pvalues_table <- read.table(inputFile, header=F, row.names=1)
 pvalues_table <- read.table(textConnection(gsub(";", " ", readLines(inputFile))), row.names = 1)
-head(qvalues_table)
 colnames(pvalues_table) <- c("less_distance", "less", "twosided_distance","twosided","greater_distance","greater")
 nr <- nrow(pvalues_table)
 qvalues_table <- pvalues_table
-head(qvalues_table)
 qvalues_table$less <- p.adjust(pvalues_table$less, method="fdr", n=nr)
 qvalues_table$twosided <- p.adjust(pvalues_table$twosided, method="fdr", n=nr)
 qvalues_table$greater <- p.adjust(pvalues_table$greater, method="fdr", n=nr)
-head(qvalues_table)
 output_file <- paste(inputFile,".Qvalues",sep="")
 write.table(qvalues_table,output_file,sep="\t")
 
