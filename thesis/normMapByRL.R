@@ -24,7 +24,7 @@ n_mappings <- 3;
 mapping_status <- 4;
 
 ## Calculate bin vector of assigned read lengths
-length_bins <- pretty(f1[f1$V4 == 1,]$V2);
+length_bins <- pretty(f1[f1$V4 == 1,]$V2, n=20);
 
 length_bins[1] <- min(f1$V2);
 length_bins[length(length_bins)] <- max(f1$V2);
@@ -77,6 +77,6 @@ for(i in seq_len(length(length_bins)-1)){
 
 ## Print the new gene count with normalization factor
 
-write.table(temp_file,paste(inputFile,"ReadCountNormalizedByRL",sep = "."),sep = "\t", quote = F, row.names = F, col.names = F);
+write.table(temp_file,paste(inputFile,"ReadCountNormalizedByRL.20bins",sep = "."),sep = "\t", quote = F, row.names = F, col.names = F);
 
 rm("temp_file")
