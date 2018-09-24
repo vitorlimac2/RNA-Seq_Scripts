@@ -9,10 +9,7 @@ if(length(args)!=1){
 ## input file
 ## READ | LENGTH | NUMBER_OF_MAPPINGS | STATUS 
 
-setwd("/home/vitor/Proj_ProC_R/analysis/")
-
-#inputFile <- args[1]
-inputFile <- "ProR1.MappedReadInfo"
+inputFile <- args[1]
 
 f1 <- read.table(inputFile, sep="\t")
 
