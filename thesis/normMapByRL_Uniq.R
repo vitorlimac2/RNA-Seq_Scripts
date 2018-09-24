@@ -53,4 +53,24 @@ normalization_factor
 ## Assign the normalization factor to each read
 
 temp_file <- f1[f1$V4!=0,]
+
 rm("f1")
+
+temp_file$V5 <- 0
+
+for(i in seq_len(length(length_bins)-1)){
+  x <- i;
+  y <- i+1;
+  
+  if(y != length(length_bins)){
+    temp_file[temp_file$V2 >= length_bins[x] & temp_file$V2 < length_bins[y],]$V5 <- normalization_factor[y];
+  }else{
+    temp_file[temp_file$V2 >= length_bins[x] & temp_file$V2 <= length_bins[y],]$V5 <- normalization_factor[y];
+  }
+}
+
+## Print the new gene count with normalization factor
+
+write.table(temp_file,paste(inputFile,"ReadCountNormalizedByRL",sep = "."),sep = "\t", quote = F, row.names = F, col.names = F);
+
+rm("temp_file")
