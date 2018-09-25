@@ -1,5 +1,8 @@
 ## Manipulate counts with deseq2
 
+source("https://bioconductor.org/biocLite.R")
+biocLite("DESeq2")
+
 library("DESeq2")
 library("ggplot2")
 
@@ -19,7 +22,7 @@ replicates <- c("ProC1",
 
 plot.gene.ranking <- function(replicate, reference, norm_counts, rank = NULL, raw_counts = NULL, reference2 = NULL){
   
-  
+  rank = NULL
   if(is.null(rank)){
     target_genes <- rownames(norm_counts[order(norm_counts[,replicate], decreasing = T),])
   }else{
@@ -39,32 +42,30 @@ plot.gene.ranking <- function(replicate, reference, norm_counts, rank = NULL, ra
   
   points(log10(norm_counts[target_genes,reference]), col="darkgreen", pch = "*")
   
- 
-  
   if(!is.null(raw_counts)){
-    lines(log10(raw_counts_filtered[target_genes,replicate_target]), col="red")
+    lines(log10(raw_counts_filtered[target_genes,replicate]), col="red")
   }
   
   if(is.null(reference2) & is.null(raw_counts)){
     legend("bottomleft",
-           legend=c(reference, replicate_target),
+           legend=c(reference, replicate),
            fill=c("darkgreen", "blue"),
            bty="n")
   }else if(!is.null(reference2) & !is.null(raw_counts)){
     legend("bottomleft",
-           legend=c(reference, reference2, paste(replicate_target," (I)", sep=""),
-                    paste(replicate_target," (II)",sep="")),
+           legend=c(reference, reference2, paste(replicate," (I)", sep=""),
+                    paste(replicate," (II)",sep="")),
            fill=c("darkgreen","gray", "blue", "red"),
            bty="n")
   }else if(is.null(reference2) & !is.null(raw_counts)){
     legend("bottomleft",
-           legend=c(reference, paste(replicate_target," (I)", sep=""),
-                    paste(replicate_target," (II)",sep="")),
+           legend=c(reference, paste(replicate," (I)", sep=""),
+                    paste(replicate, " (II)",sep="")),
            fill=c("darkgreen", "blue", "red"),
            bty="n")
   }else if(!is.null(reference2) & is.null(raw_counts)){
     legend("bottomleft",
-           legend=c(reference, reference2, paste(replicate_target," (I)", sep="")),
+           legend=c(reference, reference2, paste(replicate," (I)", sep="")),
            fill=c("darkgreen","gray", "blue"),
            bty="n")
   }
@@ -74,14 +75,16 @@ workdir <- "/home/vitor/Downloads"
 
 setwd(workdir)
 
-raw_counts <- "counts_raw_nofrac.tsv"
-norm_counts <- "counts_norm_nofrac.tsv"
+raw_counts <- "Counts_NoNormalized_Frac.txt"
+norm_counts <- "Counts_Normalized_Frac.txt"
 
 raw_counts <- read.table(raw_counts, header=FALSE, skip = 1,row.names = 1)
 norm_counts <- read.table(norm_counts, header=FALSE, skip = 1, row.names = 1)
 
-raw_counts <- raw_counts[,3:(2+length(replicates))]
-norm_counts <- norm_counts[,3:(2+length(replicates))]
+head(raw_counts)
+head(norm_counts)
+#raw_counts <- raw_counts[,3:(2+length(replicates))]
+#norm_counts <- norm_counts[,3:(2+length(replicates))]
 
 colnames(raw_counts) <- replicates
 colnames(norm_counts) <- replicates
@@ -89,18 +92,18 @@ colnames(norm_counts) <- replicates
 raw_counts_filtered <- raw_counts[rowMeans(raw_counts)>=1 & rowMeans(norm_counts) >= 1,]
 norm_counts_filtered <- norm_counts[rowMeans(raw_counts)>=1 & rowMeans(norm_counts) >= 1,] 
 
-replicate <- "ProC7"
+replicate <- "ProR1"
 
 reference <- "HiSeq1"
 reference2 <- "HiSeq2"
 
-target_genes <- target_genes <- rownames(norm_counts[order(norm_counts[,replicate], decreasing = T),])
+target_genes <- rownames(norm_counts[order(norm_counts[,replicate], decreasing = T),])
 
 
 plot.gene.ranking(replicate = replicate,
                   reference = reference,
-                  reference2 = reference2,
                   norm_counts = norm_counts_filtered,
+                  reference2 = reference2,
                   raw_counts = raw_counts_filtered)
 
 identify(c(1:length(log10(norm_counts[target_genes,reference]))), 
