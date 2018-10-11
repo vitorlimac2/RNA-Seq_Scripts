@@ -18,6 +18,8 @@ length_bins <- pretty(f1[f1$V4 == 1,]$V2, n=5)
 length_bins[1] <- min(f1$V2)
 length_bins[length(length_bins)] <- max(f1$V2);
 
+length_bins
+
 mapping_rate_vector <- vector(mode="numeric",length=length(length_bins));
 mapped_read_vector <- vector(mode="numeric",length=length(length_bins));
 unmapped_read_vector<- vector(mode="numeric",length=length(length_bins));
@@ -40,8 +42,12 @@ for(i in seq_len(length(length_bins)-1)){
 ## overall mapping rate
 mapping_rate_vector <- mapped_read_vector*100/(mapped_read_vector+unmapped_read_vector);
 
+x <- mapping_rate_vector[mapping_rate_vector!=Inf & mapping_rate_vector!=0]
+
 ## Calculate median mapping rate
-m <- median(mapping_rate_vector,na.rm = T);
+m <- median(x,na.rm = T);
+
+m
 
 ## Calculate normalization factor for each bin
 normalization_factor <- m/mapping_rate_vector;
@@ -68,6 +74,6 @@ for(i in seq_len(length(length_bins)-1)){
 
 ## Print the new gene count with normalization factor
 
-write.table(temp_file,paste(inputFile,"ReadCountNormalizedByRL",sep = "."),sep = "\t", quote = F, row.names = F, col.names = F);
+write.table(temp_file,paste(inputFile,"ReadCountNormalizedByRL_Unique",sep = "."),sep = "\t", quote = F, row.names = F, col.names = F);
 
 rm("temp_file")
