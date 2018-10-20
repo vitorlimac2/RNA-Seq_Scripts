@@ -1,9 +1,10 @@
 ## quantification with DESeq2
 
-#source("https://bioconductor.org/biocLite.R")
+source("https://bioconductor.org/biocLite.R")
 #library(bioconductor)
-#biocLite("DESeq2")
+biocLite("DESeq2")
 
+a
 library(DESeq2)
 library(ggplot2)
 
@@ -19,7 +20,7 @@ replicates <- c("Epi1",
 #my_quant <- "allReplicates_output_protein.coding"
 my_quant <- "group_count.txt"
 
-setwd("/home/vitor/Downloads/")
+setwd("/home/vitor/Projects/Paralog_Quantification_Y/")
 
 featureCounts_file <- read.table(my_quant, header = F)
 
