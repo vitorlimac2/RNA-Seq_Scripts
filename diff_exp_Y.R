@@ -15,7 +15,7 @@ replicates <- c("Epi1",
                 "Trypo3")
 
 setwd("/media/vitor/Seagate Expansion Drive/Luciana/")
-my_quant <- "group_count.txt"
+my_quant <- "group_count_edited.txt"
 
 featureCounts_file <- read.table(my_quant, header = F)
 
@@ -38,12 +38,12 @@ dds <- dds[ rowSums(counts(dds)) > 1, ]
 dds <- DESeq(dds)
 res <- results(dds, contrast=c("condition","Trypo", "Epi"))
 
-write.csv(res, file="results.csv")
+write.table(res, file="results_edited.csv", sep = "\t", quote = F)
 
 
 #### Mean normalized count by condition
 
-write.table(file="norm_counts.txt",counts(dds, normalized = TRUE),sep = "\t", quote = F)
+write.table(file="norm_counts_edited.txt",counts(dds, normalized = TRUE), sep = "\t", quote = F)
 
 
 ## 
