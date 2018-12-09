@@ -116,4 +116,16 @@ print "[150,200[",mapped["150"]*100/(unmapped["150"]+mapped["150"]), unique["150
 print "[200,250[",mapped["200"]*100/(unmapped["200"]+mapped["200"]), unique["200"]*100/(unmapped["200"]+not_unique["200"] + unique["200"]);
 print "[250,...[",mapped["250"]*100/(unmapped["250"]+mapped["250"]), unique["250"]*100/(unmapped["250"]+not_unique["250"] + unique["250"]);
 
+
+print "Total"
+
+print "[20,50[", (unmapped["20"]+not_unique["20"] + unique["20"])*100/total;
+print "[50,100[", (unmapped["50"]+not_unique["50"] +unique["50"])*100/total;
+print "[100,150[", (unmapped["100"]+not_unique["100"] + unique["100"])*100/total;
+print "[150,200[", (unmapped["150"]+not_unique["150"] + unique["150"])*100/total;
+print "[200,250[", (unmapped["200"]+not_unique["200"] + unique["200"])*100/total;
+print "[250,...[", (unmapped["250"]+not_unique["250"] + unique["250"])*100/total;
+
 }'
+
+
