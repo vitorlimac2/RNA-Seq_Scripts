@@ -1,17 +1,41 @@
 ## read file
 
+### Primeiro precisa testar se a distribuição das amostras é bem diferente
+### com KS
+
+mse <- function(vec1,vec2,x){
+  lm1 <- lm(vec1~vec2,x,);
+  sm <- summary(lm1);
+  return(mean(sm$residuals^2))
+  }
+
 setwd("/media/vitor/Seagate Expansion Drive/Thesis/")
 
-f1 <- read.table("ProR1.Analisys")
-f2 <- read.table("ProC3.Analisys")
 
-y <- f1[f1$V4=="L",]
+f1 <- read.table("ProC1.Analisys")
+f2 <- read.table("ProC2.Analisys")
 
-n_iterations <- 500;
+f1$V2 <- f1$V2*1000000/sum(f1$V2)
+f1$V3 <- f1$V3*1000000/sum(f1$V3)
+f1
+f2$V2 <- f2$V2*1000000/sum(f2$V2)
+f2$V3 <- f2$V3*1000000/sum(f2$V3)
+
+f1$V2 <- log(f1$V2 + 0.1)
+f1$V3 <- log(f1$V3 + 0.1)
+f2$V2 <- log(f2$V2 + 0.1)
+f2$V3 <- log(f2$V3 + 0.1)
+
+y <- f1[f1$V4 == "N",]
+y
+
+n_iterations <- 100;
 i = 0;
 
 v1 <- vector(mode="numeric", length=n_iterations)
 v2 <- vector(mode="numeric", length=n_iterations)
+mse1 <- vector(mode="numeric", length=n_iterations)
+mse2 <- vector(mode="numeric", length=n_iterations)
 
 while (i <= n_iterations) {
   f1_lf <-  y[sample(nrow(y), 200), ]
@@ -20,6 +44,9 @@ while (i <= n_iterations) {
   c1 <- cor.test(x$V2.x, x$V2.y, method="spearman")
   c2 <- cor.test(x$V3.x, x$V3.y, method="spearman")
   if(c1$p.value <= 0.01 &  c1$p.value <= 0.01){
+    mse1[i] <- mse(x$V2.x,x$V2.y,x)
+    print(mse(x$V2.x,x$V2.y,x))
+    mse2[i] <- mse(x$V3.x, x$V3.y,x)
     v1[i] <- c1$estimate^2
     v2[i] <- c2$estimate^2
     i <- i + 1
@@ -31,11 +58,110 @@ while (i <= n_iterations) {
 
 plot(main = "Distribuição Empírica Cumulativa - ProR2 vs ProC1 - Baixa Fragmentação",
      ecdf(v1), lwd=2,xlim=range(c(v1, v2)), col="red",
-     xlab="Correlação (Spearman)")
-plot(ecdf(v2),  lwd=2, add=TRUE, lty="dashed", col="blue")
+     xlab="Correlação (Spearman)",
+     ylab="%")
+plot(ecdf(v2),  lwd=2, add=TRUE, lty="dashed", col="black")
 
-legend(min(v1,v2), .9,box.lwd = 0,box.col = "white",bg = "white", 
-       legend = c("Não-normalizado", "Normalizado" ), 
-       fill=c("red", "blue"))
+legend(title = "CPM (log)",min(v1,v2), .9,box.lwd = 0,box.col = "white",bg = "white", 
+       legend = c("Não-ajustado", "Ajustado" ), 
+       fill=c("red", "black"))
+
+plot(ylab="Erro Quadrático Médio", 
+     col='red',
+     log='y',mse1,ylim=range(c(mse1, mse2)), 
+     xlab='Reamostragem',
+     type='l', lwd=3)
+lines(mse2, col='black',type='l', lwd=3)
+boxplot(mse1,mse2, outline = F)
+
+
 
 ####################################################################3
+
+## define replicate to compare
+REP1 <- "ProR1"
+REP2 <- "ProR2"
+## read status file
+
+status1 <- read.table(paste(REP1,".status",sep=""))
+status2 <- read.table(paste(REP2,".status",sep=""))
+
+nrow(status1)
+nrow(status2)
+
+## read raw file
+raw_file <- read.table("RawAll.SizeFactorEstimated", 
+                       header = F)
+
+## read norm file
+norm_file <- read.table("NormalizedOnlyAffected.tsv.SizeFactorEstimated",
+                        header=F)
+colnames(raw_file) <- headings
+colnames(norm_file) <- headings
+
+m <- merge(raw_file, norm_file, by="gene", sort = T)
+
+nrow(m)
+
+f1 <- data.frame(gene = m$gene, V2 = m[,paste(REP1,".x",sep="")], 
+                V3= m[,paste(REP1,".y",sep="")])
+summary(f1$V3)
+
+f2 <- data.frame(gene = m$gene, V2 = m[,paste(REP2,".x",sep="")], 
+                V3= m[,paste(REP2,".y",sep="")])
+
+nrow(f1)
+
+f1$V2 <- f1$V2*1000000/sum(f1$V2)
+f1$V3 <- f1$V3*1000000/sum(f1$V3)
+f1
+f2$V2 <- f2$V2*1000000/sum(f2$V2)
+f2$V3 <- f2$V3*1000000/sum(f2$V3)
+f2
+f1$V2 <- log(f1$V2 + 0.1)
+f1$V3 <- log(f1$V3 + 0.1)
+f2$V2 <- log(f2$V2 + 0.1)
+f2$V3 <- log(f2$V3 + 0.1)
+
+
+STATUS = "L"
+
+keep <- status1[status1$V2 == STATUS,]$V1
+y <- f1[keep,]
+nrow(y)
+n_iterations <- 100;
+i = 0;
+
+vcor1 <- vector(mode="numeric", length=n_iterations)
+vcor2 <- vector(mode="numeric", length=n_iterations)
+mse1 <- vector(mode="numeric", length=n_iterations)
+mse2 <- vector(mode="numeric", length=n_iterations)
+
+while (i <= n_iterations) {
+  f1_lf <-  y[sample(nrow(y), 200), ]
+  x <- merge(f1_lf, f2, by = "gene", sort = T)
+  print(nrow(x))
+  c1 <- cor.test(x$V2.x, x$V2.y, method="spearman")
+  c2 <- cor.test(x$V3.x, x$V3.y, method="spearman")
+  if(c1$p.value <= 0.01 &  c1$p.value <= 0.01){
+    mse1[i] <- mse(x$V2.x,x$V2.y,x)
+    print(mse(x$V2.x,x$V2.y,x))
+    mse2[i] <- mse(x$V3.x, x$V3.y,x)
+    vcor1[i] <- c1$estimate^2
+    vcor2[i] <- c2$estimate^2
+    i <- i + 1
+  }else{
+    i <- i -1
+  }
+}
+
+plot(main = "Distribuição Empírica Cumulativa - ProR2 vs ProC1 - Baixa Fragmentação",
+     ecdf(vcor1), lwd=2, xlim=range(c(vcor1, vcor2)), col="red",
+     xlab="Correlação (Spearman)",
+     ylab="%")
+plot(ecdf(vcor2),  lwd=2, add=TRUE, lty="dashed", col="black")
+
+legend(title = "CPM (log)",min(vcor1,vcor2), .9,box.lwd = 0,box.col = "white",bg = "white", 
+       legend = c("Não-ajustado", "Ajustado" ), 
+       fill=c("red", "black"))
+
