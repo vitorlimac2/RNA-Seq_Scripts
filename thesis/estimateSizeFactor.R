@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 args <- commandArgs(trailingOnly=TRUE)
 inputFile <- args[1]
-cts <- read.table(inputFile, row.names = 1)
+cts <- read.table(inputFile, row.names = 1, header = T)
 replicates <- c("ProC1", "ProC2", "ProC3","ProC4","ProC5","ProC6","ProC7","ProC8","ProC9","ProR1","ProR2","Hiseq1","Hiseq2")
 cts <- cts[rowSums(cts) > 1,]
 cts <- round(cts)
