@@ -82,5 +82,4 @@ summary(f1$V5)
 
 ## Print the new gene count with normalization factor
 
-write.table(f1,paste(inputFile,"ReadCountNormalizedByRL",sep = "."),sep = "\t", quote = F, row.names = F, col.names = F);
-
+write.table(f1,paste(inputFile,"ReadCountNormalizedByRL_Unique",sep = "."),sep = "\t", quote = F, row.names = F, col.names = F)
