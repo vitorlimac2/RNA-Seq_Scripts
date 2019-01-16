@@ -62,10 +62,7 @@ cor.my.ecdf <- function(REP1,REP2,STATUS = NULL, n_iterations, n_observations = 
     vcor2[i] <- c2$estimate^2
     i <- i + 1
   }
-  
-  
-  return(t.test(vcor2,vcor1,paired=TRUE,alternative="greater")$p.value)
-  
+  return(shapiro.test(vcor2)$p.value)
 }
 
 setwd("/media/vitor/Seagate Expansion Drive/Thesis/")
@@ -87,11 +84,11 @@ replicates <- c("ProC1", "ProC2", "ProC3", "ProC4",
 
 ########## ProC vs ProR
 ## for cada replica
-for(j in 1:5){
+for(j in 6:7){
   z <- 1
-  for(i in 1:r){
+  for(i in 8:9){
     
-    for(k in 8:9){
+    for(k in 6:7){
       REP1 <- replicates[j]
       REP2 <- replicates[k]
       if(replicates[j]==replicates[k])
@@ -164,32 +161,3 @@ qvcorC3 <- p.adjust(vcorC3, method = "fdr",n=length(vcorC3))
 qvcorC4 <- p.adjust(vcorC4, method = "fdr",n=length(vcorC4))
 qvcorC5<- p.adjust(vcorC5, method = "fdr",n=length(vcorC5))
 
-plot_range <- range(c(qvcorC1,qvcorC2,qvcorC3,qvcorC4,qvcorC5))
-
-plot(main = "Fragmentação Química vs Enzimática",
-     ecdf(qvcorC1), 
-     lwd=2, 
-     col="black",
-     xlab="FDR",
-     ylab="Sub-amostragem (%)",
-     yaxt='n')
-axis(2, at= c(0,0.2,.4,.60,.80,1),labels=c(0,20,40,60,80,100), col.axis="black", las=2)
-
-plot(main = "Fragmentação Química vs Enzimática",
-     ecdf(qvcorC6), 
-     lwd=2, 
-     col="red",
-     xlab="FDR",
-     ylab="Sub-amostragem (%)",
-     yaxt='n')
-axis(2, at= c(0,0.2,.4,.60,.80,1),labels=c(0,20,40,60,80,100), col.axis="black", las=2)
-
-qvcorR1 <- p.adjust(vcorR1, method = "fdr",n=length(vcorR1))
-qvcorR2<- p.adjust(vcorR2, method = "fdr",n=length(vcorR2))
-
-max(qvcorR1, qvcorR2)
-
-plot(ecdf(qvcorC2),  lwd=2, add=TRUE, lty="dashed", col="black")
-plot(ecdf(qvcorC3),  lwd=2, add=TRUE, lty="dashed", col="blue")
-plot(ecdf(qvcorC4),  lwd=2, add=TRUE, lty="dashed", col="darkgreen")
-plot(ecdf(qvcorC5),  lwd=2, add=TRUE, lty="dashed", col="darkyellow")
