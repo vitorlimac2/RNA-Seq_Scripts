@@ -6,28 +6,22 @@ if(length(args)!=1){
   stop("Missing options.")
 }
 
-## Test
 ## input file
-## READ | LENGTH | STATUS | GENE
-
-## Read input file
-
-## File with read, it length and mapping status
+## READ | LENGTH | NUMBER_OF_MAPPINGS | STATUS 
 
 inputFile <- args[1]
 
-f1 <- read.table(inputFile, fill = T, sep="\t");
+f1 <- read.table(inputFile, sep="\t")
 
-read_col <- 1;
-length_col <- 2;
-n_mappings <- 3;
-mapping_status <- 4;
+nrow(f1)
+length_bins <- pretty(f1$V2, n=5)
 
-## Calculate bin vector of assigned read lengths
-length_bins <- pretty(f1[f1$V4 == 1,]$V2, n=20);
+#length_bins <- seq(min(f1$V2),max(f1$V2),by = 20)
 
-length_bins[1] <- min(f1$V2);
+length_bins[1] <- min(f1$V2)
 length_bins[length(length_bins)] <- max(f1$V2);
+
+length_bins
 
 mapping_rate_vector <- vector(mode="numeric",length=length(length_bins));
 mapped_read_vector <- vector(mode="numeric",length=length(length_bins));
@@ -41,42 +35,52 @@ for(i in seq_len(length(length_bins)-1)){
   
   if(y != length(length_bins)){
     mapped_read_vector[y] <- nrow(f1[f1$V2 >= length_bins[x] & f1$V2 < length_bins[y] & f1$V4==1,]);
-    unmapped_read_vector[y] <- nrow(f1[f1$V2 >= length_bins[x] & f1$V2 < length_bins[y] & f1$V4==0,]);
-    }else{
+    unmapped_read_vector[y] <- nrow(f1[f1$V2 >= length_bins[x] & f1$V2 < length_bins[y] & f1$V4!=1,]);
+  }else{
     mapped_read_vector[y] <- nrow(f1[f1$V2 >= length_bins[x] & f1$V2 <= length_bins[y] & f1$V4==1,]);
-    unmapped_read_vector[y] <- nrow(f1[f1$V2 >= length_bins[x] & f1$V2 <= length_bins[y] & f1$V4==0,]);
+    unmapped_read_vector[y] <- nrow(f1[f1$V2 >= length_bins[x] & f1$V2 <= length_bins[y] & f1$V4!=1,]);
   }
 }
+
 ## overall mapping rate
-mapping_rate_vector <- mapped_read_vector/(mapped_read_vector+unmapped_read_vector)*100;
+mapping_rate_vector <- mapped_read_vector*100/(mapped_read_vector+unmapped_read_vector);
+mapping_rate_vector
+x <- mapping_rate_vector[mapping_rate_vector!=Inf]
 
 ## Calculate median mapping rate
-m <- median(mapping_rate_vector,na.rm = T);
+m <- median(x,na.rm = T);
+
+m
 
 ## Calculate normalization factor for each bin
 normalization_factor <- m/mapping_rate_vector;
-
+normalization_factor
 ## Assign the normalization factor to each read
 
-temp_file <- f1[f1$V4!=0,];
-
-rm("f1");
-
-temp_file$V5 <- 0
+f1$V5 <- 0
 
 for(i in seq_len(length(length_bins)-1)){
   x <- i;
   y <- i+1;
   
   if(y != length(length_bins)){
-    temp_file[temp_file$V2 >= length_bins[x] & temp_file$V2 < length_bins[y],]$V5 <- normalization_factor[y];
+    if(normalization_factor[y]=="Inf" | normalization_factor[y]=="NaN"){
+      f1[f1$V2 >= length_bins[x] & f1$V2 < length_bins[y],]$V5 <- 0;
+    }else{
+      f1[f1$V2 >= length_bins[x] & f1$V2 < length_bins[y],]$V5 <- normalization_factor[y];
+    }
+    
+  }else if(normalization_factor[y]=="Inf" | normalization_factor[y]=="NaN"){
+    f1[f1$V2 >= length_bins[x] & f1$V2 <= length_bins[y],]$V5 <- 0;
   }else{
-    temp_file[temp_file$V2 >= length_bins[x] & temp_file$V2 <= length_bins[y],]$V5 <- normalization_factor[y];
+    f1[f1$V2 >= length_bins[x] & f1$V2 <= length_bins[y],]$V5 <- normalization_factor[y];
+    
   }
 }
 
+summary(f1$V5)
+
 ## Print the new gene count with normalization factor
 
-write.table(temp_file,paste(inputFile,"ReadCountNormalizedByRL.20bins",sep = "."),sep = "\t", quote = F, row.names = F, col.names = F);
+write.table(f1,paste(inputFile,"ReadCountNormalizedByRL",sep = "."),sep = "\t", quote = F, row.names = F, col.names = F);
 
-rm("temp_file")
