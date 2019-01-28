@@ -91,7 +91,7 @@ replicates <- c("ProC1", "ProC2", "ProC3", "ProC4",
     z <- 1
     for(i in 1:r){
       
-      for(k in 8:9){
+      for(k in 6:7){
         REP1 <- replicates[j]
         REP2 <- replicates[k]
         if(replicates[j]==replicates[k])
@@ -163,8 +163,6 @@ qvcorC2 <- p.adjust(vcorC2, method = "fdr",n=length(vcorC2))
 qvcorC3 <- p.adjust(vcorC3, method = "fdr",n=length(vcorC3))
 qvcorC4 <- p.adjust(vcorC4, method = "fdr",n=length(vcorC4))
 qvcorC5<- p.adjust(vcorC5, method = "fdr",n=length(vcorC5))
-
-
 
 plot_range <- range(c(qvcorC1,qvcorC2,qvcorC3,qvcorC4,qvcorC5))
 
