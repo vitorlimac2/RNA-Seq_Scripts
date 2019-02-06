@@ -1,11 +1,11 @@
 
-cor.my.ecdf <- function(REP1,REP2,STATUS = NULL, n_iterations, n_observations = NULL, norm_path, raw_path){
+cor.my.ecdf <- function(REP1,REP2,
+                        STATUS = NULL, 
+                        n_iterations, n_observations = NULL, norm_path, raw_path){
   
   
   vcor1 <- vector(mode="numeric", length=n_iterations)
   vcor2 <- vector(mode="numeric", length=n_iterations)
-  
-  status1 <- read.table(paste(REP1,".status",sep=""))
   
   ## read raw file
   raw_file <- read.table(raw_path, 

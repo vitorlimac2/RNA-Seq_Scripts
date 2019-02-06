@@ -51,8 +51,8 @@ plot.my.ecdf <- function(REP1,REP2,STATUS = NULL, n_iterations, n_observations =
     c1 <- cor.test(x$V2.x, x$V2.y, method="spearman")
     c2 <- cor.test(x$V3.x, x$V3.y, method="spearman")
     
-    vcor1[i] <- c1$estimate^2
-    vcor2[i] <- c2$estimate^2
+    vcor1[i] <- c1$estimate
+    vcor2[i] <- c2$estimate
     i <- i + 1
     # }else{
     #    i <- i - 1
@@ -104,7 +104,7 @@ plot.my.ecdf <- function(REP1,REP2,STATUS = NULL, n_iterations, n_observations =
 setwd("/media/vitor/Seagate Expansion Drive/Thesis/")
 
 #### APENAS PLOT
-plot.my.ecdf(REP1 = "ProC", REP2 = "HiSeq", 
+plot.my.ecdf(REP1 = "ProC_0.2", REP2 = "HiSeq", 
              n_iterations = 300, 
              #      STATUS = "L", 
              #       n_observations = 100, 
