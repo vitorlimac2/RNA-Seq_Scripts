@@ -63,6 +63,7 @@ multiple.test <- function(REP1, REP2, norm_path, raw_path, n_iterations_cor, n_i
                                 n_iterations = n_iterations_cor,
                                 norm_path = norm_path, 
                                 raw_path = raw_path)
+    i <- i + 1
   }
   return(vec_Qvalues <- p.adjust(vec_Pvalues, method = "fdr",n=length(vec_Pvalues)))
 } 
