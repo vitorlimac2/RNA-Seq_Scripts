@@ -38,19 +38,21 @@ cor.my.ecdf <- function(REP1,REP2,
   
   y <- f1
   
+  it<-1
+  
   if(is.null(n_observations))
     n_observations <- round(.25*nrow(y))
-  while (i <= n_iterations) {
+  while (it <= n_iterations) {
     f1_lf <-  y[sample(nrow(y), n_observations), ]
     x <- merge(f1_lf, f2, by = "gene", sort = T)
     #  print(nrow(x))
     c1 <- cor.test(x$V2.x, x$V2.y, method="spearman")
     c2 <- cor.test(x$V3.x, x$V3.y, method="spearman")
-    vcor1[i] <- c1$estimate
-    vcor2[i] <- c2$estimate
-    i <- i + 1
+    vcor1[it] <- c1$estimate
+    vcor2[it] <- c2$estimate
+    it <- it + 1
   }
-  return(wilcox.test(vcor2,vcor1,paired = TRUE, alternative="greater")$p.value)
+  return(wilcox.test(vcor2,vcor1, alternative="greater")$p.value)
 }
 
 multiple.test <- function(REP1, REP2, norm_path, raw_path, n_iterations_cor, n_iterations){
@@ -83,14 +85,14 @@ qvcorC_2_HiSeq <- multiple.test(REP1 = "ProC_2",
 qvcorC_2_R <- multiple.test(REP1 = "ProC_2", 
                             REP2 = "ProR",
                             n_iterations_cor = 100,
-                            n_iterarions = 200,
+                            n_iterations = 200,
                             norm_path = "NormalizedAllMean.tsv",
                             raw_path = "RawAllMean.tsv")
 
 qvcorR_HiSeq <- multiple.test(REP1 = "ProR", 
                               REP2 = "HiSeq",
                               n_iterations_cor = 100,
-                              n_iterarions = 200,
+                              n_iterations = 200,
                               norm_path = "NormalizedAllMean.tsv",
                               raw_path = "RawAllMean.tsv")
 
@@ -104,6 +106,22 @@ h_3 <- hist(-log10(qvcorR_HiSeq), breaks=my_breaks, plot=FALSE)
 max_y <- max(h_1$counts*100/length(qvcorC_2_HiSeq), 
              h_2$counts*100/length(qvcorC_2_R),
              h_3$counts*100/length(qvcorR_HiSeq))
+
+boxplot(qvcorC_2_HiSeq, 
+        qvcorC_2_R, qvcorR_HiSeq, 
+        log='y', 
+        outline = T, 
+        #las=1, 
+        names = c("ProC vs HiSeq","ProC vs ProR", "ProR vs HiSeq"),
+        ylab="FDR",
+        yaxt="n")
+
+yaxis <- c(5e-04, 5e-03, 5e-02, 1e-01, 0.2,0.3)
+
+axis(2, at=yaxis, labels = yaxis, las=2)
+
+
+legend("topleft")
 
 plot(main = "", 
      h_1$mids, 
@@ -121,10 +139,10 @@ plot(main = "",
 lines(h_2$mids, h_2$counts*100/length(qvcorC_2_R), col="red")
 lines(h_3$mids, h_3$counts*100/length(qvcorR_HiSeq), col="blue")
 
-xaxis <- c(0.05,0.1,.2,.5,1,2)
+xaxis <- c(0.5,1,1.5,2,2.5,3.5)
 
 
-axis(1, at=xaxis, labels = 10^(-1)*xaxis, las=2)
+axis(1, at=xaxis, labels = 10^((-1)*xaxis), las=2)
 
 
 ## Plot P-value adjusted #######################################
