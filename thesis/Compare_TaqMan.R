@@ -25,9 +25,14 @@ norm_file$ProR <- log10(norm_file$ProR  + 0.00000001)
 
 taqman <- read.table(taqman_path, header=T)
 
+head(taqman)
+taqman$taqman <- log10(taqman$taqman  + 0.00000001)
+
 
 x <- merge(raw_file, taqman, by = "gene", sort = T)
 
+head(x)
+head(z)
 z <- merge(norm_file, taqman, by = "gene", sort = T)
 
 c1 <- cor.test(x$ProC_2, x$taqman, method="spearman")
@@ -35,7 +40,7 @@ c2 <- cor.test(z$ProC_2, x$taqman, method="spearman")
 
 c3 <- cor.test(x$ProR, x$taqman, method="spearman")
 c4 <- cor.test(z$ProR, x$taqman, method="spearman")
-
+nrow(taqman)
 plot(x$ProR, x$taqman)
 
 head(x)

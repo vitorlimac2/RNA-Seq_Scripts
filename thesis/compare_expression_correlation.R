@@ -33,6 +33,7 @@ plot.my.ecdf <- function(REP1,REP2,STATUS = NULL, n_iterations, n_observations =
   f2$V3 <- log(f2$V3 + 0.1)
   
   
+  
   #STATUS = "N"
   
   y <- f1
@@ -58,8 +59,6 @@ plot.my.ecdf <- function(REP1,REP2,STATUS = NULL, n_iterations, n_observations =
     #    i <- i - 1
     #  }
   }
-  
-  print(t.test(vcor2,vcor1,paired = TRUE, alternative="greater"))
   
   fragmentation_status = "Sem perfil definido";
   if(is.null(STATUS))
@@ -97,14 +96,14 @@ plot.my.ecdf <- function(REP1,REP2,STATUS = NULL, n_iterations, n_observations =
   #      type='l', lwd=3)
   # lines(mse2, col='black',type='l', lwd=3)
   
-  return(t.test(vcor2,vcor1,paired=TRUE,alternative="greater"))
+  return(wilcox.test(vcor2,vcor1, alternative="greater")$p.value)
   
 }
 
 setwd("/media/vitor/Seagate Expansion Drive/Thesis/")
 
 #### APENAS PLOT
-plot.my.ecdf(REP1 = "ProC_0.2", REP2 = "HiSeq", 
+plot.my.ecdf(REP1 = "ProR", REP2 = "HiSeq", 
              n_iterations = 300, 
              #      STATUS = "L", 
              #       n_observations = 100, 
