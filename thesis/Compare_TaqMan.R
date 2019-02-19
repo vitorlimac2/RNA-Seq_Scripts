@@ -11,48 +11,30 @@ raw_file <- read.table(raw_path,
 norm_file <- read.table(norm_path,
                         header=T)
 
-raw_file$ProC_2 <- raw_file$ProC_2*1000000/sum(raw_file$ProC_2)
-norm_file$ProC_2 <- norm_file$ProC_2*1000000/sum(norm_file$ProC_2)
-
-raw_file$ProR <- raw_file$ProR*1000000/sum(raw_file$ProR)
-norm_file$ProR <- norm_file$ProR*1000000/sum(norm_file$ProR)
-
-raw_file$ProC_2 <- log10(raw_file$ProC_2 + 0.00000001)
-norm_file$ProC_2 <- log10(norm_file$ProC_2  + 0.00000001)
-
-raw_file$ProR <- log10(raw_file$ProR  + 0.00000001)
-norm_file$ProR <- log10(norm_file$ProR  + 0.00000001)
-
 taqman <- read.table(taqman_path, header=T)
 
-head(taqman)
+raw_file$ProC_2 <- log10(raw_file$ProC_2 + 0.00000001)
+raw_file$ProR <- log10(raw_file$ProR  + 0.00000001)
+raw_file$HiSeq <- log10(raw_file$HiSeq + 00000001)
+
+norm_file$ProC_2 <- log10(norm_file$ProC_2  + 0.00000001)
+norm_file$ProR <- log10(norm_file$ProR  + 0.00000001)
+norm_file$HiSeq <- log10(norm_file$HiSeq + 00000001)
+
 taqman$taqman <- log10(taqman$taqman  + 0.00000001)
 
+raw <- merge(raw_file, taqman, by = "gene", sort = T)
+norm <- merge(norm_file, taqman, by = "gene", sort = T)
 
-x <- merge(raw_file, taqman, by = "gene", sort = T)
-
-head(x)
-head(z)
-z <- merge(norm_file, taqman, by = "gene", sort = T)
-
-c1 <- cor.test(x$ProC_2, x$taqman, method="spearman")
-c2 <- cor.test(z$ProC_2, x$taqman, method="spearman")
-
-c3 <- cor.test(x$ProR, x$taqman, method="spearman")
-c4 <- cor.test(z$ProR, x$taqman, method="spearman")
-nrow(taqman)
-plot(x$ProR, x$taqman)
-
-head(x)
+l1 <- lm(raw$ProR ~ norm$taqman); rsq(l1)
 
 
-c1
-c2
-c3
-c4
+boxplot(raw$ProC_2, norm$ProC_2, raw$ProR, norm$ProR, raw$HiSeq, norm$taqman, outline = F)
 
-l1 <- lm(x$ProC_2 ~ x$taqman)
-summary(l1)$r.squared
+c1 <- cor.test(raw$ProC_2, raw$taqman, method="spearman")
+c2 <- cor.test(norm$ProC_2, norm$taqman, method="spearman")
 
-l2 <- lm(z$ProC_2 ~ x$taqman)
-summary(l2)$r.squared
+c3 <- cor.test(raw$ProR, raw$taqman, method="spearman")
+c4 <- cor.test(norm$ProR, norm$taqman, method="spearman")
+
+cor.test(log2(raw$HiSeq + 0.00000001), raw$taqman, method="spearman")
