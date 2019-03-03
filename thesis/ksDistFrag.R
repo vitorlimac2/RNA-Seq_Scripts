@@ -5,9 +5,9 @@
 ks.table <- function(tab_row){
   
   gene <- tab_row[1]
-  
+
   #dist_frag <- strsplit(as.character(tab_row[2]),",")
-  dist_frag <- strsplit(as.character(levels(tab_row[2])[tab_row[2]],","))
+  dist_frag <- strsplit(as.character(tab_row[2]),",")
   dist_frag <- as.numeric(unlist(dist_frag))
   
   d1 <- ks.test(dist_frag,rep_frags, alternative="two.sided")
@@ -18,6 +18,7 @@ ks.table <- function(tab_row){
   out_less <- paste(d2$statistic,d2$p.value,sep = ";")
   out_greater <- paste(d3$statistic,d3$p.value,sep = ";")
   output_line <- paste(gene, out_less, out_two.sided, out_greater, sep = " ")
+  
   return(output_line)
   
 }
@@ -34,9 +35,18 @@ if(length(args)!=3){
   stop("Missing options.")
 }
 
-replicate_read_lengths_file <- args[1]
-inputFile <- args[2]
-numCores <- as.numeric(args[3])
+# uncomment this at the end
+#replicate_read_lengths_file <- args[1]
+#inputFile <- args[2]
+#numCores <- as.numeric(args[3])
+
+## comment this at the end
+setwd("/media/vitor/Seagate Expansion Drive/Thesis/DEG_ILB/")
+replicate_read_lengths_file <- "Test.MappedReadInfo"
+inputFile <- "Test.GeneDistFrag"
+numCores <- as.numeric("2")
+
+
 
 #### ONLY FOR TEST ##################
 #replicate_read_lengths_file <- "/home/vitor/Proj_ProC_R/reads/trimmed/ProC_1.fastq.trimmed.fq.read_lengths.txt"
@@ -44,9 +54,9 @@ numCores <- as.numeric(args[3])
 #total_genes <- 5
 #numCores <- 2
 ######################################
-rep_frags <- read.table(replicate_read_lengths_file, header = F, fill = T)
+rep_frags <- read.table(replicate_read_lengths_file, header = F)
 rep_frags <- rep_frags[rep_frags$V3 == 1,]$V2
-mapped_frags <- read.table(inputFile, header = F)[,1:2]
+mapped_frags <- read.table(inputFile, header = F)
 total_genes <- nrow(mapped_frags)
 #######################################################################################################
 ### MULTI-THREAD
@@ -60,6 +70,7 @@ clus <- makeCluster(numCores, type="FORK")
 # appreciated, is extremely simple: you need to pass the variable 
 # name/s in a character vector (or a single string, as in this case)
 clusterExport(clus,"rep_frags")
+
 aa <- parApply(clus,mapped_frags,1, ks.table)
 output_file <- paste(inputFile,".ks.output",sep="")
 write(aa,output_file)
@@ -67,3 +78,17 @@ stopCluster(clus)
 gc()
 
 #########################################################################################
+
+# ## TEST
+# 
+# # "ENSMUSG00000050737 0.409950145409223;0.00012788302329305 0.409950145409223;0.000255766046585504 0.0447652679684254;0.89862359276185"
+# 
+# gene <- "ENSMUSG00000050737"
+# 
+# #dist_frag <- strsplit(as.character(tab_row[2]),",")
+# dist_frag <- strsplit(as.character(mapped_frags[mapped_frags$V1 == "ENSMUSG00000050737",2]),",")
+# dist_frag <- as.numeric(unlist(dist_frag))
+# 
+# ks.test(dist_frag,rep_frags, alternative="two.sided")
+# ks.test(dist_frag,rep_frags, alternative="less")
+# ks.test(dist_frag,rep_frags, alternative="greater")
