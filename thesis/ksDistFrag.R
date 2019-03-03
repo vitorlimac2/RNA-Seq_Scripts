@@ -5,7 +5,9 @@
 ks.table <- function(tab_row){
   
   gene <- tab_row[1]
-  dist_frag <- strsplit(as.character(tab_row[2]),",")
+  
+  #dist_frag <- strsplit(as.character(tab_row[2]),",")
+  dist_frag <- strsplit(as.character(levels(tab_row[2])[tab_row[2]],","))
   dist_frag <- as.numeric(unlist(dist_frag))
   
   d1 <- ks.test(dist_frag,rep_frags, alternative="two.sided")
