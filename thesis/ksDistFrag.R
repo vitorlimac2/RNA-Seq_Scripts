@@ -36,15 +36,15 @@ if(length(args)!=3){
 }
 
 # uncomment this at the end
-#replicate_read_lengths_file <- args[1]
-#inputFile <- args[2]
-#numCores <- as.numeric(args[3])
+replicate_read_lengths_file <- args[1]
+inputFile <- args[2]
+numCores <- as.numeric(args[3])
 
 ## comment this at the end
-setwd("/media/vitor/Seagate Expansion Drive/Thesis/DEG_ILB/")
-replicate_read_lengths_file <- "Test.MappedReadInfo"
-inputFile <- "Test.GeneDistFrag"
-numCores <- as.numeric("2")
+# setwd("/media/vitor/Seagate Expansion Drive/Thesis/DEG_ILB/")
+# replicate_read_lengths_file <- "Test.MappedReadInfo"
+# inputFile <- "Test.GeneDistFrag"
+# numCores <- as.numeric("2")
 
 
 
