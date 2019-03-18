@@ -5,7 +5,7 @@ args <- commandArgs(trailingOnly=TRUE)
 
 ks.test.from.list <- function(geneid){
   
-  dist_frag_gene <- strsplit(as.character(levels(replicate[geneid,1]))[replicate[geneid,1]],",")
+  dist_frag_gene <- strsplit(as.character(levels(replicate.GeneDistFrag[geneid,1]))[replicate.GeneDistFrag[geneid,1]],",")
   dist_frag_gene <- as.numeric(unlist(dist_frag_gene))
 
   d1 <- ks.test(dist_frag_gene,dist_frag_replicate, alternative="two.sided")
@@ -26,13 +26,14 @@ ks.test.from.list <- function(geneid){
 # try it: read.table(gzfile("/tmp/foo.csv.gz"))
 
 ## list of genes and their mapped read lengths
-replicate<- read.table(args[1], header=F, row.names=1);
+replicate.GeneDistFrag <- read.table(args[1], header=F, row.names=1);
+
 #replicate<- read.table("/media/vitor/Seagate Expansion Drive/Thesis/DEG_ILB/ILB_9577.GeneDistFrag", header=F, row.names = 1);
 
 ## list of genes
 genes <- read.table(args[2], header = F)$V1
 
-dist_frag_replicate <- strsplit(as.character(levels(replicate[,1])[replicate[,1]]),",")
+dist_frag_replicate <- strsplit(as.character(levels(replicate.GeneDistFrag[,1])[replicate.GeneDistFrag[,1]]),",")
 dist_frag_replicate <- as.numeric(unlist(dist_frag_replicate))
 
 genes <- as.character(levels(genes))[genes]
