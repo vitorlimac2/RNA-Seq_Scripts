@@ -57,7 +57,7 @@ fragment.plot <- function(geneid){
 ##################################################################################################
 ######### import files
 # try it: read.table(gzfile("/tmp/foo.csv.gz"))
-setwd("/media/vitor/Seagate Expansion Drive/Thesis/")
+setwd("/media/vitor/Seagate Expansion Drive/Thesis/DEG")
 
 replicates <- c("ProC1","ProC2","ProC3","ProC4","ProC5","ProC6","ProC7","ProC8","ProC9","ProR1","ProR2")
 
